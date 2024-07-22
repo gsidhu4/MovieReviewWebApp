@@ -9,7 +9,6 @@ Welcome to **Sidhu's Movie Review**, a web application dedicated to reviewing Pu
 - [Usage](#usage)
 - [API](#api)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Features
 
@@ -119,6 +118,4 @@ We welcome contributions to **Sidhu's Movie Review**! To contribute:
 4. Push your changes to your forked repository.
 5. Open a pull request to merge your changes into the main repository.
 
-## License
 
-This project is licensed under the MIT License - see the [LICENSE](LIC
