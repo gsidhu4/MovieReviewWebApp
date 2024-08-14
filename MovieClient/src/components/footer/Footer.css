@@ -1,0 +1,22 @@
+/* Ensure that the footer is at the bottom of the page */
+html, body {
+  height: 100%; /* Make sure the body takes up the full height */
+  margin: 0; /* Remove default margin */
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Ensure the App takes up at least the full height of the viewport */
+}
+
+.footer {
+  margin-top: auto; /* Pushes the footer to the bottom */
+  background-color: rgb(6, 6, 8); /* Light background color for the footer */
+  padding: 20px 0; /* Add some padding */
+  text-align: center; /* Center the text */
+}
+
+.footer p {
+  margin: 0; /* Remove default margin */
+}

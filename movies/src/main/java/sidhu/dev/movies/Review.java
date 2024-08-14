@@ -5,19 +5,24 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection="reviews")
+import java.time.LocalDateTime;
+
+@Document(collection = "reviews")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@AllArgsConstructor @NoArgsConstructor
 public class Review {
-    @Id
     private ObjectId id;
     private String body;
+    private LocalDateTime created;
+    private LocalDateTime updated;
+    private String username;
 
-    public Review(String body) {
+    public Review(String body,String username, LocalDateTime created, LocalDateTime updated) {
         this.body = body;
+        this.username = username;
+        this.created = created;
+        this.updated = updated;
     }
 }

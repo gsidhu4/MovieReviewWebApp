@@ -8,10 +8,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
 @SpringBootApplication
-public class MoviesApplication {
-
+public class MovieistApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(MoviesApplication.class, args);
+		SpringApplication.run(MovieistApplication.class, args);
 	}
 
 	@Bean
@@ -20,7 +19,7 @@ public class MoviesApplication {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
-						.allowedOrigins("*")
+						.allowedOrigins("http://localhost:3000","http://localhost:8080")
 						.allowedMethods("*")
 						.allowedHeaders("*")
 						.allowCredentials(false).maxAge(3600);

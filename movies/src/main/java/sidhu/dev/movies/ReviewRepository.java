@@ -2,7 +2,8 @@ package sidhu.dev.movies;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
-public interface ReviewRepository extends MongoRepository <Review, ObjectId> {
-
+@Repository
+public interface ReviewRepository extends MongoRepository<Review, ObjectId> {
 }

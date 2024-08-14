@@ -25,10 +25,7 @@ const Reviews = ({getMovieData,movie,reviews,setReviews}) => {
         {
             const response = await api.post("/api/v1/reviews",{reviewBody:rev.value,imdbId:movieId});
 
-            const updatedReviews =  reviews != null
-            ? [...reviews, { body: rev.value }]
-            : [{ body: rev.value }];
-  
+            const updatedReviews = [...reviews, {body:rev.value}];
     
             rev.value = "";
     
@@ -69,21 +66,23 @@ const Reviews = ({getMovieData,movie,reviews,setReviews}) => {
                     </>
                 }
                 {
-                    reviews?.map((r) => {
-                        return(
-                            <>
-                                <Row>
-                                    <Col>{r.body}</Col>
-                                </Row>
-                                <Row>
-                                    <Col>
-                                        <hr />
-                                    </Col>
-                                </Row>                                
-                            </>
-                        )
-                    })
-                }
+  reviews?.map((r, index) => {
+    return (
+      <React.Fragment key={r.id || index}>
+        <Row>
+          <Col>
+            <strong>{r.username}:</strong> {r.body}
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <hr />
+          </Col>
+        </Row>
+      </React.Fragment>
+    );
+  })
+}
             </Col>
         </Row>
         <Row>
