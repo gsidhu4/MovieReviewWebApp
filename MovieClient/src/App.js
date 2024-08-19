@@ -11,6 +11,7 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import api from './api/axiosConfig';
 import Footer from './components/footer/Footer';
+import { UserProvider } from './context/UserContext'; // Correct import
 
 function App() {
   const [movies, setMovies] = useState();
@@ -42,9 +43,9 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <Header />
-    
+    <UserProvider> {/* Correctly wrapping the application */}
+      <div className="App">
+        <Header />
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route path="/" element={<Home movies={movies} />} />
@@ -55,9 +56,9 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
-      
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </UserProvider>
   );
 }
 
