@@ -1,6 +1,6 @@
-# Sidhu's Movie Review
+# Movie Masala Movie Review App
 
-Welcome to **Sidhu's Movie Review**, a web application dedicated to reviewing Punjabi movies. Our platform provides detailed movie reviews, trailers, and a personal watch list to help you stay updated with the latest Punjabi cinema.
+Welcome to **Movie Masala Review**, a web application dedicated to reviewing Punjabi movies. Our platform provides detailed movie reviews, trailers, and a personal watch list to help you stay updated with the latest Punjabi cinema.
 
 ## Table of Contents
 
