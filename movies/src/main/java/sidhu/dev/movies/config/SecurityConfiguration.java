@@ -34,7 +34,7 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/auth/**").permitAll() // Ensure this is correct
+                        .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/api/v1/movies/**").permitAll()
                         .requestMatchers("/api/v1/reviews/**").permitAll()
                         .anyRequest().authenticated()
@@ -51,14 +51,15 @@ public class SecurityConfiguration {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("https://movie-client-theta.vercel.app")); 
+        configuration.setAllowedOrigins(List.of("https://movie-client-theta.vercel.app")); // Your frontend URL
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
-        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "ngrok-skip-browser-warning")); // Add the header here
-        configuration.setAllowCredentials(true); // If you need to allow credentials
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type")); // Standard headers
+        configuration.setAllowCredentials(true); // Allow credentials if needed
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 }
+
 
