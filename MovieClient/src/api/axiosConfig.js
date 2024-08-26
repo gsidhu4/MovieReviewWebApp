@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:8080',
+  baseURL: 'https://movie-review-web-app-git-master-sunny-sidhus-projects.vercel.app/',
   headers: { 
     "ngrok-skip-browser-warning": "true",
     "Content-Type": "application/json"
