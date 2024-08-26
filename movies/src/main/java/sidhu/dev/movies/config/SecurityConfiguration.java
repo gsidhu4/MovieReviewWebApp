@@ -51,7 +51,7 @@ public class SecurityConfiguration {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("https://movie-client-theta.vercel.app/")); 
+        configuration.setAllowedOrigins(List.of("https://movie-client-theta.vercel.app")); 
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "ngrok-skip-browser-warning")); // Add the header here
         configuration.setAllowCredentials(true); // If you need to allow credentials
