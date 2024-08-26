@@ -19,7 +19,7 @@ public class MovieistApplication {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
-						.allowedOrigins("https://movie-client-theta.vercel.app/")
+						.allowedOrigins("https://movie-client-theta.vercel.app")
 						.allowedMethods("*")
 						.allowedHeaders("*")
 						.allowCredentials(false).maxAge(3600);
