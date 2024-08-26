@@ -13,6 +13,7 @@ public class MovieistApplication {
 		SpringApplication.run(MovieistApplication.class, args);
 	}
 
+
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurer() {
