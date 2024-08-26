@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "movies")
@@ -24,8 +25,10 @@ public class Movie {
     private String poster;
     private List<String> backdrops;
     private List<String> genres;
-    @DocumentReference
-    private List<Review> reviews;
+    private List<ObjectId> reviewIds;
+
+    @DocumentReference(lazy = true)
+    private List<Review> reviews = new ArrayList<>();
 
     public Movie(String imdbId, String title, String releaseDate, String trailerLink, String poster, List<String> backdrops, List<String> genres) {
         this.imdbId = imdbId;
@@ -35,5 +38,6 @@ public class Movie {
         this.poster = poster;
         this.backdrops = backdrops;
         this.genres = genres;
+        this.reviews = new ArrayList<>(); // Initialize to avoid null issues
     }
 }

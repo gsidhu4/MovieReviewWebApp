@@ -1,54 +1,101 @@
-import * as React from 'react';
+import React, { useRef, useEffect } from 'react';
+import api from '../../api/axiosConfig';
+import { useParams } from 'react-router-dom';
+import { Container, Row, Col } from 'react-bootstrap';
+import ReviewForm from '../reviewForm/ReviewForm';
+import { useContext } from 'react';
+import { UserContext } from '../../context/UserContext';
 
-import axiosInstance, { setAuthHeader } from '../api/axiosConfig';
+const Reviews = ({ movie, setReviews, reviews }) => {
+  const { user } = useContext(UserContext);
+  const revText = useRef();
+  let params = useParams();
+  const movieId = params.movieId;
 
-export default class AuthContent extends React.Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            data: []
-        }
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const response = await api.get(`/api/v1/movies/${movieId}`);
+        const { movie, reviews } = response.data;
+        setReviews(reviews);  // Ensure you're setting the reviews from the API response
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+      }
     };
+  
+    fetchReviews();
+  }, [movieId, setReviews]);
+  
 
-    componentDidMount() {
-        request(
-            "GET",
-            "/messages",
-            {}).then(
-            (response) => {
-                this.setState({data: response.data})
-            }).catch(
-            (error) => {
-                if (error.response.status === 401) {
-                    setAuthHeader(null);
-                } else {
-                    this.setState({data: error.response.code})
-                }
-
-            }
-        );
-    };
-
-  render() {
-    return (
-        <div className="row justify-content-md-center">
-            <div className="col-4">
-                <div className="card" style={{width: "18rem"}}>
-                    <div className="card-body">
-                        <h5 className="card-title">Backend response</h5>
-                        <p className="card-text">Content:</p>
-                        <ul>
-                            {this.state.data && this.state.data
-                                .map((line) =>
-                                    <li key={line}>{line}</li>
-                                )
-                            }
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
+  const addReview = async (e) => {
+    e.preventDefault();
+  
+    const rev = revText.current;
+    const username = user?.username || "Anonymous";
+  
+    try {
+      const response = await api.post("/api/v1/reviews", {
+        reviewBody: rev.value,
+        imdbId: movieId,
+        username: username
+      });
+  
+      const newReview = response.data;
+  
+      setReviews(prevReviews => [...prevReviews, newReview]);
+  
+      rev.value = "";
+    } catch (err) {
+      console.error("Error adding review:", err);
+    }
   };
-}
+  
+
+  return (
+    <Container>
+      <Row>
+        <Col><h3>Reviews</h3></Col>
+      </Row>
+      <Row className="mt-2">
+        <Col>
+          <img src={movie?.poster} alt="Movie Poster" />
+        </Col>
+        <Col>
+          <Row>
+            <Col>
+              <ReviewForm handleSubmit={addReview} revText={revText} labelText="Write a Review?" />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <hr />
+            </Col>
+          </Row>
+          {reviews?.map((r, index) => (
+  <React.Fragment key={r._id || index}>
+    <Row>
+      <Col>
+        <strong>{r.username}:</strong> {r.body}
+      </Col>
+    </Row>
+    <Row>
+      <Col>
+        <hr />
+      </Col>
+    </Row>
+  </React.Fragment>
+))}
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <hr />
+        </Col>
+      </Row>
+    </Container>
+  );
+};
+
+export default Reviews;
+
+

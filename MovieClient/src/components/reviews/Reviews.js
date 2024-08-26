@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import api from '../../api/axiosConfig';
 import { useParams } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
@@ -6,41 +6,60 @@ import ReviewForm from '../reviewForm/ReviewForm';
 import { useContext } from 'react';
 import { UserContext } from '../../context/UserContext';
 
-const Reviews = ({ getMovieData, movie, reviews, setReviews }) => {
+const Reviews = ({ getMovieData, reviews, setReviews }) => {
   const { user } = useContext(UserContext);
   const revText = useRef();
   let params = useParams();
   const movieId = params.movieId;
 
+  const [movie, setMovie] = useState(null);
+
   useEffect(() => {
-    getMovieData(movieId);
+    const loadMovieData = async () => {
+      try {
+        const response = await api.get(`/api/v1/movies/${movieId}`);
+        const data = response.data;
+        console.log("Fetched movie data:", data);
+        setMovie(data);
+
+        // Fetch reviews by imdbId
+        if (data.imdbId) {
+          const reviewsResponse = await api.post('/api/v1/reviews/byImdbId', { imdbId: data.imdbId });
+          setReviews(reviewsResponse.data);
+        }
+      } catch (error) {
+        console.error("Error loading movie data:", error);
+      }
+    };
+  
+    loadMovieData();
   }, [movieId]);
 
   useEffect(() => {
     localStorage.setItem(`reviews-${movieId}`, JSON.stringify(reviews));
-  }, [movieId]);
+  }, [movieId, reviews]);
 
   const addReview = async (e) => {
     e.preventDefault();
 
     const rev = revText.current;
-    const username = user?.username || "Anonymous"; // Use the logged-in username or "Anonymous"
+    const username = user?.username || "Anonymous";
 
     try {
         const response = await api.post("/api/v1/reviews", {
             reviewBody: rev.value,
-            imdbId: movieId,
+            imdbId: movie?.imdbId || "",
             username: username
         });
 
         const newReview = response.data;
-        console.log("API Response:", newReview); // Log the response to verify the structure
+        console.log("API Response:", newReview);
 
         // Update state with the new review including username
         setReviews(prevReviews => {
-            console.log("Reviews before update:", prevReviews); // Log previous reviews
-            const updatedReviews = [...prevReviews, newReview];
-            console.log("Updated reviews:", updatedReviews); // Log updated reviews
+            console.log("Reviews before update:", prevReviews);
+            const updatedReviews = [newReview, ...prevReviews]; // Add the new review to the front of the list
+            console.log("Updated reviews:", updatedReviews);
             return updatedReviews;
         });
 
@@ -58,7 +77,11 @@ const Reviews = ({ getMovieData, movie, reviews, setReviews }) => {
       </Row>
       <Row className="mt-2">
         <Col>
-          <img src={movie?.poster} alt="Movie Poster" />
+          {movie?.poster ? (
+            <img src={movie.poster} alt="Movie Poster" style={{ maxWidth: '100%', height: 'auto' }} />
+          ) : (
+            <p>Poster not available</p>
+          )}
         </Col>
         <Col>
           <Row>
@@ -71,20 +94,24 @@ const Reviews = ({ getMovieData, movie, reviews, setReviews }) => {
               <hr />
             </Col>
           </Row>
-         {reviews?.map((r, index) => (
-    <React.Fragment key={r.id || index}>
-        <Row>
-            <Col>
-                <strong>{r.username}:</strong> {r.body}
-            </Col>
-        </Row>
-        <Row>
-            <Col>
-                <hr />
-            </Col>
-        </Row>
-    </React.Fragment>
-))}
+          {reviews?.length > 0 ? (
+            reviews.map((r, index) => (
+              <React.Fragment key={r._id || index}>
+                <Row>
+                  <Col>
+                    <strong>{r.username}:</strong> {r.reviewBody}
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <hr />
+                  </Col>
+                </Row>
+              </React.Fragment>
+            ))
+          ) : (
+            <p>No reviews available</p>
+          )}
         </Col>
       </Row>
       <Row>
@@ -97,3 +124,6 @@ const Reviews = ({ getMovieData, movie, reviews, setReviews }) => {
 };
 
 export default Reviews;
+
+
+

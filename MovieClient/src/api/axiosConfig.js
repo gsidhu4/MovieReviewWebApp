@@ -24,4 +24,3 @@ export const signup = async (data) => {
 };
 
 export default axiosInstance;
-
